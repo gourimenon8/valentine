@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Be My Valentine 💘</title>
+  <style>
+    :root{
+      --bg1:#fff1f7;
+      --bg2:#ffe9f0;
+      --card:#ffffffcc;
+      --text:#2b2b2b;
+      --pink:#ff4d88;
+      --pink2:#ff77aa;
+      --shadow: 0 20px 60px rgba(0,0,0,.12);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 20% 10%, var(--bg2), transparent),
+                  radial-gradient(1000px 700px at 80% 90%, var(--bg2), transparent),
+                  linear-gradient(180deg, var(--bg1), #fff);
+      color:var(--text);
+      overflow:hidden;
+    }
+
+    .hearts{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.35;
+      filter: blur(.2px);
+    }
+    .heart{
+      position:absolute;
+      font-size: clamp(18px, 2.2vw, 28px);
+      animation: floatUp linear infinite;
+    }
+    @keyframes floatUp{
+      from{ transform: translateY(110vh) rotate(0deg); opacity:0; }
+      10%{ opacity:1; }
+      to{ transform: translateY(-20vh) rotate(360deg); opacity:0; }
+    }
+
+    .card{
+      width:min(820px, 92vw);
+      padding: clamp(18px, 3.8vw, 36px);
+      border-radius: 28px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.5);
+      position:relative;
+    }
+
+    .top{
+      display:flex;
+      gap: 18px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-bottom: 14px;
+    }
+
+    h1{
+      margin:0 0 6px;
+      font-size: clamp(26px, 4vw, 44px);
+      letter-spacing:-.02em;
+    }
+
+    p{
+      margin:0;
+      font-size: clamp(14px, 2vw, 18px);
+      opacity:.85;
+    }
+
+    /* Photo/GIF slot */
+    .media{
+      width: clamp(120px, 18vw, 170px);
+      height: clamp(120px, 18vw, 170px);
+      border-radius: 22px;
+      overflow:hidden;
+      background: rgba(255,255,255,.8);
+      border: 1px solid rgba(0,0,0,.06);
+      box-shadow: 0 12px 28px rgba(0,0,0,.10);
+      display:grid;
+      place-items:center;
+      flex: 0 0 auto;
+      position:relative;
+    }
+    .media img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .media .placeholder{
+      padding: 12px;
+      text-align:center;
+      font-size: 12px;
+      opacity:.75;
+      line-height:1.3;
+    }
+
+    .stage{
+      position:relative;
+      height: clamp(260px, 46vh, 420px);
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.55));
+      border: 1px dashed rgba(255,77,136,.35);
+      overflow:hidden;
+    }
+
+    .bubble{
+      position:absolute;
+      left:18px;
+      top:18px;
+      padding: 10px 14px;
+      background: #fff;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,.06);
+      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+      font-size: 14px;
+      opacity:.85;
+      max-width: calc(100% - 36px);
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow:hidden;
+    }
+
+    .buttons{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 16px;
+    }
+
+    button{
+      border:0;
+      cursor:pointer;
+      padding: 14px 18px;
+      min-width: 136px;
+      border-radius: 999px;
+      font-size: 18px;
+      font-weight: 800;
+      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+      box-shadow: 0 12px 30px rgba(0,0,0,.12);
+      user-select:none;
+      touch-action: manipulation;
+      white-space: nowrap;
+    }
+
+    button:active{ transform: translateY(1px) scale(.99); }
+
+    #yesBtn{
+      background: linear-gradient(135deg, var(--pink), var(--pink2));
+      color:white;
+    }
+    #yesBtn:hover{ filter: brightness(1.03); transform: translateY(-2px); }
+
+    #noBtn{
+      background: #ffffff;
+      color: #444;
+      border: 1px solid rgba(0,0,0,.08);
+      position:absolute;
+      left: 55%;
+      top: 55%;
+      transform: translate(-50%,-50%);
+    }
+
+    .success{
+      display:none;
+      text-align:center;
+      padding: 18px 0 6px;
+    }
+    .success h2{
+      margin: 0 0 10px;
+      font-size: clamp(22px, 3.2vw, 32px);
+    }
+    .success .big{
+      font-size: clamp(34px, 5vw, 54px);
+      margin: 6px 0 8px;
+    }
+    .success .note{
+      opacity:.85;
+      font-size: 16px;
+    }
+
+    .footer{
+      margin-top: 14px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      font-size: 13px;
+      opacity:.7;
+      flex-wrap:wrap;
+    }
+
+    .shake{
+      animation: shake .18s ease-in-out 0s 2;
+    }
+    @keyframes shake{
+      0%{ transform: translate(-50%,-50%) translateX(0); }
+      25%{ transform: translate(-50%,-50%) translateX(-6px); }
+      50%{ transform: translate(-50%,-50%) translateX(6px); }
+      75%{ transform: translate(-50%,-50%) translateX(-4px); }
+      100%{ transform: translate(-50%,-50%) translateX(0); }
+    }
+
+    /* Confetti */
+    .confetti{
+      position: fixed;
+      inset: 0;
+      pointer-events:none;
+      overflow:hidden;
+      display:none;
+    }
+    .confetti i{
+      position:absolute;
+      width:10px; height:14px;
+      opacity:.9;
+      transform: translateY(-20vh) rotate(0deg);
+      animation: confettiFall linear forwards;
+      border-radius: 2px;
+    }
+    @keyframes confettiFall{
+      to{
+        transform: translateY(120vh) rotate(720deg);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hearts" id="hearts"></div>
+  <div class="confetti" id="confetti"></div>
+
+  <main class="card" id="card">
+    <div class="top">
+      <div>
+        <h1>Will you be my Valentine? 💘</h1>
+        <p>There’s a correct answer… and a button that panics.</p>
+      </div>
+
+      <!-- PHOTO / GIF SLOT
+           Later, replace the placeholder with:
+           <img src="your-file.jpg" alt="Us 💖" />
+           Put the image file in the same folder as index.html.
+      -->
+      <div class="media" id="media">
+        <div class="placeholder">
+          Drop a photo/GIF here later 💞<br/>
+          (I’ll wire it up when you attach it)
+        </div>
+      </div>
+    </div>
+
+    <section class="stage" id="stage">
+      <div class="bubble" id="bubble">Try clicking “No” 😈</div>
+
+      <div class="buttons">
+        <button id="yesBtn">Yes 💖</button>
+        <button id="noBtn" aria-label="No">No 🙅</button>
+      </div>
+    </section>
+
+    <div class="success" id="success">
+      <div class="big">💞🥰💞</div>
+      <h2>YAYYY! Best decision ever.</h2>
+      <div class="note">Now we’re officially Valentine-coded 💌</div>
+    </div>
+
+    <div class="footer">
+      <span>Tip: Works on mobile too.</span>
+      <span>Made with (forced) love 💗</span>
+    </div>
+  </main>
+
+  <script>
+    // Floating background hearts
+    const hearts = document.getElementById("hearts");
+    const heartEmojis = ["💗","💖","💘","💕","💞","💓","🌸","✨"];
+    function spawnHeart(){
+      const el = document.createElement("div");
+      el.className = "heart";
+      el.textContent = heartEmojis[Math.floor(Math.random()*heartEmojis.length)];
+      el.style.left = Math.random()*100 + "vw";
+      el.style.animationDuration = (6 + Math.random()*7) + "s";
+      el.style.animationDelay = (-Math.random()*6) + "s";
+      el.style.opacity = (0.2 + Math.random()*0.6);
+      hearts.appendChild(el);
+      setTimeout(()=> el.remove(), 14000);
+    }
+    for(let i=0;i<18;i++) spawnHeart();
+    setInterval(spawnHeart, 700);
+
+    const stage = document.getElementById("stage");
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const success = document.getElementById("success");
+    const bubble = document.getElementById("bubble");
+    const confetti = document.getElementById("confetti");
+
+    // Phrases the NO button cycles through
+    const noPhrases = [
+      "No 🙅",
+      "Wait… 😳",
+      "Stop chasing me 😭",
+      "OMG no 😵‍💫",
+      "Not today 😤",
+      "Pls 😭",
+      "You’re too fast 😅",
+      "Aaaah 🏃‍♀️💨",
+      "I’m scared 😶‍🌫️"
+    ];
+    let phraseIndex = 0;
+
+    function setNoText(nextText){
+      noBtn.textContent = nextText ?? noPhrases[phraseIndex % noPhrases.length];
+      phraseIndex++;
+    }
+
+    function setBubbleText(text){
+      bubble.textContent = text;
+    }
+
+    // Keep track of NO button position (relative inside stage)
+    let noPos = { x: 0.55, y: 0.55 };
+
+    function placeNoButton(relX, relY){
+      const rect = stage.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      const padding = 10;
+      const minX = (btnRect.width/2 + padding) / rect.width;
+      const maxX = 1 - minX;
+      const minY = (btnRect.height/2 + padding) / rect.height;
+      const maxY = 1 - minY;
+
+      noPos.x = Math.max(minX, Math.min(maxX, relX));
+      noPos.y = Math.max(minY, Math.min(maxY, relY));
+
+      noBtn.style.left = (noPos.x * 100) + "%";
+      noBtn.style.top  = (noPos.y * 100) + "%";
+    }
+
+    function distanceToNo(clientX, clientY){
+      const rect = noBtn.getBoundingClientRect();
+      const cx = rect.left + rect.width/2;
+      const cy = rect.top + rect.height/2;
+      const dx = clientX - cx;
+      const dy = clientY - cy;
+      return { d: Math.hypot(dx, dy), dx, dy };
+    }
+
+    // Throttle phrase changes so it doesn't flicker too fast while chasing
+    let lastPhraseAt = 0;
+    function maybeChangeNoPhrase(){
+      const now = Date.now();
+      if (now - lastPhraseAt > 180) {
+        setNoText();
+        lastPhraseAt = now;
+      }
+    }
+
+    function dodgeToRandomSpot(){
+      placeNoButton(Math.random()*0.9 + 0.05, Math.random()*0.8 + 0.1);
+      noBtn.classList.remove("shake");
+      // reflow to restart animation
+      void noBtn.offsetWidth;
+      noBtn.classList.add("shake");
+      maybeChangeNoPhrase();
+    }
+
+    function repelFromPointer(clientX, clientY){
+      const stageRect = stage.getBoundingClientRect();
+      const { d, dx, dy } = distanceToNo(clientX, clientY);
+
+      const triggerRadius = 150; // px
+      if (d > triggerRadius) return;
+
+      const awayX = dx / (d || 1);
+      const awayY = dy / (d || 1);
+
+      const strength = (triggerRadius - d) / triggerRadius; // 0..1
+      const stepPx = 70 + strength * 130; // 70..200 px
+
+      const stepRelX = (awayX * stepPx) / stageRect.width;
+      const stepRelY = (awayY * stepPx) / stageRect.height;
+
+      const wiggle = 0.06;
+      const nx = noPos.x + stepRelX + (Math.random() - 0.5) * wiggle;
+      const ny = noPos.y + stepRelY + (Math.random() - 0.5) * wiggle;
+
+      placeNoButton(nx, ny);
+      maybeChangeNoPhrase();
+      setBubbleText("Bro… STOP 😭");
+    }
+
+    // Desktop
+    stage.addEventListener("mousemove", (e) => {
+      repelFromPointer(e.clientX, e.clientY);
+    });
+
+    // Mobile
+    stage.addEventListener("touchmove", (e) => {
+      const t = e.touches[0];
+      if (!t) return;
+      repelFromPointer(t.clientX, t.clientY);
+    }, { passive: true });
+
+    // Hover dodge (extra)
+    noBtn.addEventListener("mouseenter", () => {
+      setBubbleText("Nice try 😈");
+      dodgeToRandomSpot();
+    });
+
+    // If NO gets clicked somehow
+    noBtn.addEventListener("click", () => {
+      setBubbleText("You really thought 😭");
+      dodgeToRandomSpot();
+    });
+
+    // YES
+    yesBtn.addEventListener("click", () => {
+      success.style.display = "block";
+      stage.style.display = "none";
+      popConfetti();
+    });
+
+    window.addEventListener("load", () => {
+      placeNoButton(noPos.x, noPos.y);
+      setNoText("No 🙅");
+    });
+    window.addEventListener("resize", () => placeNoButton(noPos.x, noPos.y));
+
+    function popConfetti(){
+      confetti.innerHTML = "";
+      confetti.style.display = "block";
+      const pieces = 130;
+      for(let i=0;i<pieces;i++){
+        const p = document.createElement("i");
+        p.style.left = Math.random()*100 + "vw";
+        p.style.top = (-10 - Math.random()*40) + "vh";
+        p.style.animationDuration = (2.8 + Math.random()*2.2) + "s";
+        p.style.animationDelay = (Math.random()*0.2) + "s";
+        p.style.background = `hsl(${Math.floor(Math.random()*360)}, 90%, 70%)`;
+        confetti.appendChild(p);
+      }
+      setTimeout(()=> { confetti.style.display="none"; confetti.innerHTML=""; }, 5200);
+    }
+  </script>
+</body>
+</html>
+
